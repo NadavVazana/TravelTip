@@ -19,21 +19,27 @@ window.renderQueryParams = renderQueryParams
 function onInit() {
 
     mapService.initMap()
-        .then(() => {
-            onGetLocs()
-            getPosition().then(saveCurrPos)
-            renderQueryParams()
-        })
-        .catch(() => console.log('Error: cannot init map'))
-
+    .then(() => {
+        onGetLocs()
+        renderQueryParams()
+    })
+    .catch(() => console.log('Error: cannot init map'))
+    
 }
 
 function renderQueryParams() {
     const queryStringParams = new URLSearchParams(window.location.search)
     const lat = queryStringParams.get('lat')
     const lng = queryStringParams.get('lng')
-    mapService.panTo(lat, lng)
+    if(!lat && !lng){
+        getPosition()
+        .then(res => {return {lat: res.coords.latitude,lng:res.coords.longitude}})
+        .then(mapService.panTo)
+    }
+    mapService.panTo(lat,lng)
 }
+
+
 
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -43,6 +49,7 @@ function getPosition() {
     })
 }
 function saveCurrPos(pos) {
+    console.log(pos);
     currLoc = { lat: pos.lat, lng: pos.lng }
     storageService.save('currLoc', currLoc)
 }
@@ -67,16 +74,7 @@ function onGetLatlngByAddress(ev) {
 
 }
 
-function setQueryStringParams() {
-    const queryStringParams = `?lat=${currLoc.lat}&lng=${currLoc.lng}`
-    const newUrl =
-        window.location.protocol +
-        '//' +
-        window.location.host +
-        window.location.pathname +
-        queryStringParams
-    window.history.pushState({ path: newUrl }, '', newUrl)
-}
+
 
 function renderCurrentLocation(address) {
     document.querySelector('.user-pos').innerText =
