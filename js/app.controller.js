@@ -21,7 +21,6 @@ function onInit() {
     mapService.initMap()
     .then(() => {
         onGetLocs()
-        getPosition().then(saveCurrPos)
         renderQueryParams()
     })
     .catch(() => console.log('Error: cannot init map'))
@@ -32,8 +31,15 @@ function renderQueryParams(){
     const queryStringParams = new URLSearchParams(window.location.search)
     const lat = queryStringParams.get('lat')
     const lng = queryStringParams.get('lng')
+    if(!lat && !lng){
+        getPosition()
+        .then(res => {return {lat: res.coords.latitude,lng:res.coords.longitude}})
+        .then(mapService.panTo)
+    }
     mapService.panTo(lat,lng)
 }
+
+
 
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -43,6 +49,7 @@ function getPosition() {
     })
 }
 function saveCurrPos(pos) {
+    console.log(pos);
     currLoc = { lat: pos.lat, lng: pos.lng }
     storageService.save('currLoc', currLoc)
 }
