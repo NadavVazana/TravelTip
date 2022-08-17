@@ -1,3 +1,5 @@
+import { axios } from "../lib/axios"
+
 export const mapService = {
     initMap,
     addMarker,
@@ -31,8 +33,14 @@ function addMarker(loc) {
         map: gMap,
         title: 'Hello World!'
     })
+    // getAddressByLatlng(marker.position)
     return marker
 }
+
+// function getAddressByLatlng(loc){
+//     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${API_KEY}`)
+//     .then(console.log)
+// }
 
 function panTo(lat, lng) {
     var laLatLng = new google.maps.LatLng(lat, lng)
