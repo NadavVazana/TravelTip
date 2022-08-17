@@ -3,7 +3,7 @@ import { mapService } from './services/map.service.js'
 import {weatherService} from './services/weather.service.js'
 
 window.onload = onInit
-window.onAddMarker = onAddMarker
+// window.onAddMarker = onAddMarker
 window.onPanTo = onPanTo
 window.onGetLocs = onGetLocs
 window.onGetUserPos = onGetUserPos
@@ -14,6 +14,7 @@ window.onRemoveLocation = onRemoveLocation
 
 
 function onInit() {
+    onGetLocs()
     mapService.initMap()
         .then(() => {
             console.log('Map is ready')
@@ -39,12 +40,10 @@ function onGetLatlngByAddress(ev){
     .then(pos =>{
         renderCurrentLocation(pos.data.results[0].formatted_address)
         return pos.data.results[0].geometry.location} )
-    .then(pos => mapService.panTo(pos))
-
-   
-
-
-    
+    .then(pos => {
+        onGetLocs()
+        mapService.panTo(pos)})
+        
 
 }
 
@@ -53,10 +52,6 @@ function renderCurrentLocation(address){
     `${address}`
 }
 
-function onAddMarker() {
-    console.log('Adding a marker')
-    mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 })
-}
 
 function onGetLocs() {
     locService.getLocs()
