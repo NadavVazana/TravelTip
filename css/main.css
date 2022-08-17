@@ -27,6 +27,8 @@ body {
     transition: color 0.5s, transform 0.5s;
 }
 
+
+
 .btn:hover {
     color: #edf2f4;
     transform: translate(2%, -2%);
@@ -38,11 +40,29 @@ body {
 }
 
 .main-header{ 
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #2b2d42;
     margin-block-end: 1em;
+}
+
+.copy-modal {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    background-color: #242639;
+    transition: bottom 0.5s;
+    color: #edf2f4;
+    padding: 4px 8px;
+}
+
+.copy-modal.modal-open {
+    bottom: -1.5rem;
+    opacity: 1;
+    transition: bottom 0.5s;
 }
 
 .logo {
@@ -66,10 +86,13 @@ body {
 }
 
 .location-display {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
+
 
 .location-display p {
     font-size: 1.5rem;
@@ -141,12 +164,21 @@ img {
 
 
 @media (max-width: 800px) {
+    html {
+        font-size: 12px;
+    }
     .main-section {
         flex-direction: column-reverse;
         margin-inline: 20px;
     }
     #map {
         margin-bottom: 20px;
+    }
+    .btn {
+        padding: 3px 6px;
+    }
+    .location-info {
+        width: 60%;
     }
 }
 
