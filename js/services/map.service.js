@@ -36,10 +36,6 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
         })
 }
 
-// function removeMarker(lat,lng){
-
-// }
-
 function renderMarkers() {
 
     const markers = storageService.load('markersDB')
@@ -55,6 +51,7 @@ function renderMarkers() {
     })
 
 }
+
 function addMarker(loc) {
     const lat = loc.latLng.lat()
     const lng = loc.latLng.lng()
@@ -81,7 +78,6 @@ function getLatlngByAddress(address) {
         })
 }
 
-
 function getAddressByLatlng(loc) {
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${GEO_KEY}`)
         .then(res => res.data)
@@ -98,7 +94,6 @@ function panTo(lat, lng) {
     var laLatLng = new google.maps.LatLng(lat, lng)
     gMap.panTo(laLatLng)
 }
-
 
 function _connectGoogleApi() {
     if (window.google) return Promise.resolve()
