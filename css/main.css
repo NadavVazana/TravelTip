@@ -13,9 +13,6 @@ body {
     color: #2b2d42;
 }
 
-.main-layout > *:not(.full) {
-    max-width: 1100px;
-}
 
 .btn {
     border: none;
@@ -137,4 +134,39 @@ img {
 
 .weather-info {
     flex-basis: 40%;
+}
+
+
+
+
+
+@media (max-width: 800px) {
+    .main-section {
+        flex-direction: column-reverse;
+        margin-inline: 20px;
+    }
+    #map {
+        margin-bottom: 20px;
+    }
+}
+
+@media (min-width: 800px) {
+    .main-layout > *:not(.full) {
+        max-width: 850px;
+    }
+}
+@media (min-width: 960px) {
+    .main-layout > *:not(.full) {
+        max-width: 950px;
+    }
+}
+@media (min-width: 1180px) {
+    .main-layout > *:not(.full) {
+        max-width: 1100px;
+    }
+}
+@media (min-width: 1350px) {
+    .main-layout > *:not(.full) {
+        max-width: 1300px;
+    }
 }
