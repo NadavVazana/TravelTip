@@ -5,7 +5,9 @@ import { storageService } from '../services/storage.service.js'
 export const mapService = {
     initMap,
     addMarker,
-    panTo
+    panTo,
+    getAddressByLatlng,
+    renderMarkers
 }
 
 
@@ -27,9 +29,22 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
 
             })
             gMap.addListener('click', addMarker)
+            renderMarkers()
         })
 }
 
+function renderMarkers(){
+    const locs = storageService.load('locsDB')
+    if(!locs || !locs.length) return
+    locs.forEach(loc =>{
+        new google.maps.Marker({
+            position: { lat: loc.lat,lng:loc.lng },
+            map: gMap,
+            title: 'Hello World!'
+        })
+    })
+
+}
 function addMarker(loc) {
 
     var marker = new google.maps.Marker({
@@ -47,8 +62,9 @@ function getAddressByLatlng(loc) {
     axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GEO_KEY}`)
         .then(res => res.data)
         .then(loc =>{ 
-            gLocations.push({ name: loc.results[0].formatted_address, lat, lng })
-            storageService.save('locsDB', gLocations )})
+            gLocations.push({ name: loc.results[0].formatted_address, lat, lng,id: makeId() })
+            storageService.save('locsDB', gLocations )
+        return loc})
 }
 
 function panTo(lat, lng) {
