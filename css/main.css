@@ -46,23 +46,25 @@ body {
     justify-content: space-between;
     background-color: #2b2d42;
     margin-block-end: 1em;
+    z-index: 500;
 }
 
 .copy-modal {
     position: absolute;
-    bottom: 0;
+    top: 50px;
     right: 0;
     opacity: 0;
     background-color: #242639;
-    transition: bottom 0.5s;
+    transition: top 0.5s, opacity 0.2s;
     color: #edf2f4;
     padding: 4px 8px;
 }
 
 .copy-modal.modal-open {
-    bottom: -1.5rem;
+    top: calc(60px + 1.3rem);
     opacity: 1;
-    transition: bottom 0.5s;
+    transition: top 0.5s;
+    z-index: -11;
 }
 
 .logo {
