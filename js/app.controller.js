@@ -17,7 +17,7 @@ window.renderQueryParams = renderQueryParams
 
 
 function onInit() {
-    
+
     mapService.initMap()
     .then(() => {
         onGetLocs()
@@ -27,7 +27,7 @@ function onInit() {
     
 }
 
-function renderQueryParams(){
+function renderQueryParams() {
     const queryStringParams = new URLSearchParams(window.location.search)
     const lat = queryStringParams.get('lat')
     const lng = queryStringParams.get('lng')
@@ -59,7 +59,7 @@ function onGetLatlngByAddress(ev) {
     mapService.getLatlngByAddress(address)
         .then(pos => {
             renderCurrentLocation(pos.data.results[0].formatted_address)
-            saveCurrPos({lat: pos.data.results[0].geometry.location.lat, lng: pos.data.results[0].geometry.location.lng})
+            saveCurrPos({ lat: pos.data.results[0].geometry.location.lat, lng: pos.data.results[0].geometry.location.lng })
             setQueryStringParams()
             return pos.data.results[0].geometry.location
         })
@@ -72,17 +72,27 @@ function onGetLatlngByAddress(ev) {
 
 
 
-
 }
 
 function setQueryStringParams() {
     const queryStringParams = `?lat=${currLoc.lat}&lng=${currLoc.lng}`
     const newUrl =
-    window.location.protocol +
-    '//' +
-    window.location.host +
-    window.location.pathname +
-    queryStringParams
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname +
+        queryStringParams
+    window.history.pushState({ path: newUrl }, '', newUrl)
+}
+
+function setQueryStringParams() {
+    const queryStringParams = `?lat=${currLoc.lat}&lng=${currLoc.lng}`
+    const newUrl =
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname +
+        queryStringParams
     window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
@@ -120,7 +130,7 @@ function onPanTo() {
 }
 
 function onGetWeather(lat, lng, name) {
-    saveCurrPos({lat,lng})
+    saveCurrPos({ lat, lng })
     setQueryStringParams()
     renderCurrentLocation(name)
     weatherService.getWeather(lat, lng)
@@ -130,7 +140,7 @@ function onGetWeather(lat, lng, name) {
 }
 
 function renderWeather(weather) {
-    
+
     const elWeatherDiv = document.querySelector('.weather-info')
     let strHTML = `
         <p>${weather.desc}</p>
@@ -147,8 +157,8 @@ function renderLocations(locs) {
         <div class="loc-info">
             <div class="loc-address">${loc.name}</div>
             <div class="loc-latlng">${loc.lng}, ${loc.lat}</div>
-            <button onclick = "onRemoveLocation(${loc.lat},${loc.lng})" class="delete-button">X</button>
-        </div>
+            </div>
+            <button onclick="onRemoveLocation(${loc.lat},${loc.lng})" class="btn delete-button">X</button>
         </div>`
     })
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
@@ -162,5 +172,4 @@ function onRemoveLocation(lat, lng) {
     locService.removeLocation(lat, lng)
     mapService.initMap()
     locService.getLocs().then(renderLocations)
-
 }
