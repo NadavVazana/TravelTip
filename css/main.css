@@ -1,14 +1,16 @@
 .locs {
     display: flex;
     flex-direction: column;
+    width: 50%;
 }
 
 .loc {
     display: flex;
+    align-items: center;
 }
 
 
 img {
-    width: 30px;
-    height: 30px;
+    width: 100%;
+    height: 100%;
 }

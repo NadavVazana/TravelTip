@@ -10,11 +10,11 @@ window.onGetUserPos = onGetUserPos
 
 function onInit() {
     mapService.initMap()
-    .then(() => {
-        console.log('Map is ready')
-    })
-    .catch(() => console.log('Error: cannot init map'))
-   
+        .then(() => {
+            console.log('Map is ready')
+        })
+        .catch(() => console.log('Error: cannot init map'))
+
 }
 
 
@@ -60,8 +60,10 @@ function renderLocations(locs) {
     let strHTMLs = locs.map(loc => {
         return `<div class="loc">
         <img src="img/marker.png" alt="marker">
-        <div class="loc-address">${loc.name}</div>
-        <div class="loc-latlng">${loc.lng.toFixed(5)}, ${loc.lat.toFixed(5)}</div>
+        <div class="loc-info">
+            <div class="loc-address">${loc.name}</div>
+            <div class="loc-latlng">${loc.lng.toFixed(5)}, ${loc.lat.toFixed(5)}</div>
+        </div>
         </div>`
     })
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
