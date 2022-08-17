@@ -35,17 +35,19 @@ function onGetLatlngByAddress(ev) {
     ev.preventDefault()
     const address = document.querySelector('.address-input').value
     mapService.getLatlngByAddress(address)
-    .then(pos =>{
-        renderCurrentLocation(pos.data.results[0].formatted_address)
-        return pos.data.results[0].geometry.location} )
-    .then(pos => {
-        onGetLocs()
-        mapService.panTo(pos)})
+        .then(pos => {
+            renderCurrentLocation(pos.data.results[0].formatted_address)
+            return pos.data.results[0].geometry.location
+        })
+        .then(pos => {
+            onGetLocs()
+            mapService.panTo(pos)
+        })
 
-   
 
 
-    
+
+
 
 }
 
@@ -107,8 +109,8 @@ function renderLocations(locs) {
         <div class="loc-info">
             <div class="loc-address">${loc.name}</div>
             <div class="loc-latlng">${loc.lng}, ${loc.lat}</div>
-            <button onclick = "onRemoveLocation(${loc.lat},${loc.lng})" class="delete-button">X</button>
-        </div>
+            </div>
+            <button onclick="onRemoveLocation(${loc.lat},${loc.lng})" class="btn delete-button">X</button>
         </div>`
     })
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
@@ -122,5 +124,4 @@ function onRemoveLocation(lat, lng) {
     locService.removeLocation(lat, lng)
     mapService.initMap()
     locService.getLocs().then(renderLocations)
-
 }
