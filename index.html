@@ -12,7 +12,7 @@
 
     <section class="main-section">
         <section class="location-info">
-            <div class="locations-controller">Locations: 
+            <div class="locations-controller">
                 <pre class="locs"></pre>
             </div>
             <div class="weather-info">weather stuff here</div>
@@ -20,10 +20,10 @@
         <div id="map" style="width: 100%; height: 400px;"></div>
     </section>
     
-    <span class="add-location">
-        <input type="text" onchange="onGetLatlngByAddress(this.value)">
+    <form class="add-location" onsubmit="onGetLatlngByAddress(event,this.value)">
+        <input type="text" >
         <button onclick="onAddMarker()" class="btn-add-marker">Add Marker Speific Location</button>
-    </span>
+    </form>
     <button onclick="onGetUserPos()" class="btn-user-pos">Get User Position</button>
     <button onclick="onGetLocs()" class="btn-get-locs">Get Locations</button>
     <button onclick="onPanTo()"class="btn-pan">Pan Map to Tokyo</button>
