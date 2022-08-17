@@ -3,7 +3,7 @@ import { mapService } from './services/map.service.js'
 import { weatherService } from './services/weather.service.js'
 
 window.onload = onInit
-window.onAddMarker = onAddMarker
+// window.onAddMarker = onAddMarker
 window.onPanTo = onPanTo
 window.onGetLocs = onGetLocs
 window.onGetUserPos = onGetUserPos
@@ -14,12 +14,12 @@ window.onRemoveLocation = onRemoveLocation
 
 
 function onInit() {
+    onGetLocs()
     mapService.initMap()
         .then(() => {
             console.log('Map is ready')
         })
         .catch(() => console.log('Error: cannot init map'))
-    onGetLocs()
 }
 
 
@@ -28,7 +28,6 @@ function getPosition() {
     console.log('Getting Pos')
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
-
     })
 }
 
@@ -40,13 +39,10 @@ function onGetLatlngByAddress(ev) {
             renderCurrentLocation(pos.data.results[0].formatted_address)
             return pos.data.results[0].geometry.location
         })
-        .then(pos => mapService.panTo(pos))
-
-
-
-
-
-
+        .then(pos => {
+            onGetLocs()
+            mapService.panTo(pos)
+        })
 }
 
 function renderCurrentLocation(address) {
@@ -54,10 +50,11 @@ function renderCurrentLocation(address) {
         `${address}`
 }
 
-function onAddMarker() {
-    console.log('Adding a marker')
-    mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 })
-}
+// function onAddMarker() {
+//     console.log('Adding a marker')
+//     mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 })
+//     onGetLocs()
+// }
 
 function onGetLocs() {
     locService.getLocs()
@@ -75,8 +72,6 @@ function onGetUserPos() {
                     document.querySelector('.user-pos').innerText =
                         `${res.results[0].formatted_address}`
                 })
-
-
         })
         .catch(err => {
             console.log('err!!!', err)
@@ -86,6 +81,7 @@ function onGetUserPos() {
 function onPanTo() {
     getPosition().then(pos => mapService.panTo(pos.coords.latitude, pos.coords.longitude))
 }
+
 function onGetWeather(lat, lng, name) {
     renderCurrentLocation(name)
     weatherService.getWeather(lat, lng)
@@ -93,6 +89,7 @@ function onGetWeather(lat, lng, name) {
     mapService.panTo(lat, lng)
 
 }
+
 function renderWeather(weather) {
     const elWeatherDiv = document.querySelector('.weather-info')
     let strHTML = `
@@ -102,6 +99,7 @@ function renderWeather(weather) {
     `
     elWeatherDiv.innerHTML = strHTML
 }
+
 function renderLocations(locs) {
     let strHTMLs = locs.map(loc => {
         return `<div class="loc">
@@ -118,4 +116,11 @@ function renderLocations(locs) {
 
 function k2c(kelvin) {
     return kelvin - 273.15
+}
+
+function onRemoveLocation(lat, lng) {
+    locService.removeLocation(lat, lng)
+    mapService.initMap()
+    locService.getLocs().then(renderLocations)
+
 }
