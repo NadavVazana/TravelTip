@@ -41,40 +41,45 @@ function renderMarkers(){
         new google.maps.Marker({
             position: { lat: loc.lat,lng:loc.lng },
             map: gMap,
+            icon:'icon.png',
             title: 'Hello World!'
         })
     })
 
 }
 function addMarker(loc) {
-    console.log(loc);
+    const lat =  loc.latLng.lat()
+    const lng = loc.latLng.lng()
     var marker = new google.maps.Marker({
-        position: { lat: loc.latLng.lat(), lng: loc.latLng.lng() },
+        position: { lat, lng },
         map: gMap,
+        icon: 'icon.png',
         title: 'Hello World!'
     })
-    getAddressByLatlng(marker.position)
+    getAddressByLatlng({lat,lng})
 return marker}
 
 function getLatlngByAddress(address){
     axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GEO_KEY}`)
     .then(loc => {
         console.log(loc);
-        gLocations.push( {name:loc.data.results[0].formatted_address,lat:loc.data.results[0].geometry.location.lat,lng:loc.data.results[0].geometry.location.lng})
+        gLocations.push( {name:loc.data.results[0].formatted_address,lat:loc.data.results[0].geometry.location.lat,lng:loc.data.results[0].geometry.location.lng,id:makeId(),createdAt:Date.now()})
+        
         storageService.save('locsDB', gLocations)
         renderMarkers()
         })
         
 }
 function getAddressByLatlng(loc) {
-    const lat = loc.lat()
-    const lng = loc.lng()
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GEO_KEY}`)
+
+
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${GEO_KEY}`)
         .then(res => res.data)
-        .then(loc =>{ 
-            gLocations.push({ name: loc.results[0].formatted_address, lat, lng,id: makeId() })
+        .then(location =>{ 
+            console.log(location);
+            gLocations.push({ name: location.results[0].formatted_address, lat:location.results[0].geometry.location.lat, lng:location.results[0].geometry.location.lng,id: makeId() ,createdAt:Date.now()})
             storageService.save('locsDB', gLocations )
-        return loc})
+        return location})
 }
 
 function panTo(lat, lng) {
@@ -96,3 +101,4 @@ function _connectGoogleApi() {
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
 }
+

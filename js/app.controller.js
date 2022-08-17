@@ -29,7 +29,8 @@ function getPosition() {
     })
 }
 
-function onGetLatlngByAddress(address){
+function onGetLatlngByAddress(ev,address){
+    ev.preventDefault()
     mapService.getLatlngByAddress(address)
 }
 
@@ -48,9 +49,15 @@ function onGetLocs() {
 function onGetUserPos() {
     getPosition()
         .then(pos => {
-            console.log('User position is:', pos.coords)
-            document.querySelector('.user-pos').innerText =
-                `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
+            console.log(pos);
+
+             mapService.getAddressByLatlng({lat:pos.coords.latitude,lng:pos.coords.longitude})
+            .then(res => {
+                document.querySelector('.user-pos').innerText =
+                `${res.results[0].formatted_address}`
+                })
+
+
         })
         .catch(err => {
             console.log('err!!!', err)
