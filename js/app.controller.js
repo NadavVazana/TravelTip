@@ -1,6 +1,6 @@
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
-import {weatherService} from './services/weather.service.js'
+import { weatherService } from './services/weather.service.js'
 
 window.onload = onInit
 window.onAddMarker = onAddMarker
@@ -18,7 +18,7 @@ function onInit() {
             console.log('Map is ready')
         })
         .catch(() => console.log('Error: cannot init map'))
-
+    onGetLocs()
 }
 
 
@@ -31,7 +31,7 @@ function getPosition() {
     })
 }
 
-function onGetLatlngByAddress(ev){
+function onGetLatlngByAddress(ev) {
     ev.preventDefault()
     const address = document.querySelector('.address-input').value
     mapService.getLatlngByAddress(address)
@@ -53,10 +53,10 @@ function onGetUserPos() {
     getPosition()
         .then(pos => {
 
-             mapService.getAddressByLatlng({lat:pos.coords.latitude,lng:pos.coords.longitude})
-            .then(res => {
-                document.querySelector('.user-pos').innerText =
-                `${res.results[0].formatted_address}`
+            mapService.getAddressByLatlng({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+                .then(res => {
+                    document.querySelector('.user-pos').innerText =
+                        `${res.results[0].formatted_address}`
                 })
 
 
@@ -67,17 +67,22 @@ function onGetUserPos() {
 }
 
 function onPanTo() {
-    getPosition().then(pos =>  mapService.panTo(pos.coords.latitude,pos.coords.longitude) )
+    getPosition().then(pos => mapService.panTo(pos.coords.latitude, pos.coords.longitude))
 }
-function onGetWeather(lat,lng){
-     weatherService.getWeather(lat,lng)
-    .then(renderWeather)
+function onGetWeather(lat, lng) {
+    weatherService.getWeather(lat, lng)
+        .then(renderWeather)
 
 
 }
-function renderWeather(){
-
-    
+function renderWeather(weather) {
+    const elWeatherDiv = document.querySelector('.weather-info')
+    let strHTML = `
+        <p>${weather.desc}</p>
+        <p>Temp: ${k2c(weather.temp).toFixed(2)}C</p>
+        <p>Feels Like: ${k2c(weather.feels).toFixed(2)}</p>
+    `
+    elWeatherDiv.innerHTML = strHTML
 }
 function renderLocations(locs) {
     let strHTMLs = locs.map(loc => {
@@ -90,4 +95,8 @@ function renderLocations(locs) {
         </div>`
     })
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
+}
+
+function k2c(kelvin) {
+    return kelvin - 273.15
 }
