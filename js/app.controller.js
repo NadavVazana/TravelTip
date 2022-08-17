@@ -1,7 +1,8 @@
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
+import { storageService } from './services/storage.service.js'
 import { weatherService } from './services/weather.service.js'
-
+window.currLoc = {}
 window.onload = onInit
 // window.onAddMarker = onAddMarker
 window.onPanTo = onPanTo
@@ -10,43 +11,72 @@ window.onGetUserPos = onGetUserPos
 window.onGetLatlngByAddress = onGetLatlngByAddress
 window.onGetWeather = onGetWeather
 window.onRemoveLocation = onRemoveLocation
-
+window.saveCurrPos = saveCurrPos
+window.setQueryStringParams = setQueryStringParams
+window.renderQueryParams = renderQueryParams
 
 
 function onInit() {
-    onGetLocs()
+    
     mapService.initMap()
-        .then(() => {
-            console.log('Map is ready')
-        })
-        .catch(() => console.log('Error: cannot init map'))
+    .then(() => {
+        onGetLocs()
+        getPosition().then(saveCurrPos)
+        renderQueryParams()
+    })
+    .catch(() => console.log('Error: cannot init map'))
+    
+}
+
+function renderQueryParams(){
+    const queryStringParams = new URLSearchParams(window.location.search)
+    const lat = queryStringParams.get('lat')
+    const lng = queryStringParams.get('lng')
+    mapService.panTo(lat,lng)
 }
 
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
-    console.log('Getting Pos')
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
     })
 }
-
+function saveCurrPos(pos) {
+    currLoc = { lat: pos.lat, lng: pos.lng }
+    storageService.save('currLoc', currLoc)
+}
 function onGetLatlngByAddress(ev) {
     ev.preventDefault()
     const address = document.querySelector('.address-input').value
     mapService.getLatlngByAddress(address)
-    .then(pos =>{
-        renderCurrentLocation(pos.data.results[0].formatted_address)
-        return pos.data.results[0].geometry.location} )
-    .then(pos => {
-        onGetLocs()
-        mapService.panTo(pos)})
+        .then(pos => {
+            renderCurrentLocation(pos.data.results[0].formatted_address)
+            saveCurrPos({lat: pos.data.results[0].geometry.location.lat, lng: pos.data.results[0].geometry.location.lng})
+            setQueryStringParams()
+            return pos.data.results[0].geometry.location
+        })
+        .then(pos => {
+            onGetLocs()
+            mapService.panTo(pos)
+        })
 
-   
 
 
-    
 
+
+
+}
+
+function setQueryStringParams() {
+    const queryStringParams = `?lat=${currLoc.lat}&lng=${currLoc.lng}`
+    const newUrl =
+    window.location.protocol +
+    '//' +
+    window.location.host +
+    window.location.pathname +
+    queryStringParams
+    window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
 function renderCurrentLocation(address) {
@@ -83,6 +113,8 @@ function onPanTo() {
 }
 
 function onGetWeather(lat, lng, name) {
+    saveCurrPos({lat,lng})
+    setQueryStringParams()
     renderCurrentLocation(name)
     weatherService.getWeather(lat, lng)
         .then(renderWeather)
@@ -91,6 +123,7 @@ function onGetWeather(lat, lng, name) {
 }
 
 function renderWeather(weather) {
+    
     const elWeatherDiv = document.querySelector('.weather-info')
     let strHTML = `
         <p>${weather.desc}</p>

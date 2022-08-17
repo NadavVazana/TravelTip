@@ -21,10 +21,8 @@ const GEO_KEY = 'AIzaSyDyABlnJUJyx4m17RrerAlGHkq1LzMzW0w'
 const API_KEY = 'AIzaSyDR9KBDAOGj8BPtLjEXjgRXspcgzeqEKwo'
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
-    console.log('InitMap')
     return _connectGoogleApi()
         .then(() => {
-            console.log('google available')
             gMap = new google.maps.Map(
                 document.querySelector('#map'), {
                 center: { lat, lng },
@@ -45,7 +43,6 @@ function renderMarkers() {
     const markers = storageService.load('markersDB')
     if (!markers || !markers.length) return
     markers.forEach(marker => {
-        console.log(marker);
         new google.maps.Marker({
             position: { lat: marker.lat, lng: marker.lng },
             map: gMap,
@@ -88,10 +85,11 @@ function getAddressByLatlng(loc) {
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${GEO_KEY}`)
         .then(res => res.data)
         .then(location =>{ 
-            console.log(location);
             gLocations.push({ name: location.results[0].formatted_address, lat:location.results[0].geometry.location.lat, lng:location.results[0].geometry.location.lng,id: makeId() ,createdAt:Date.now()})
             storageService.save('locsDB', gLocations )
             onGetLocs()
+            saveCurrPos({lat:location.results[0].geometry.location.lat, lng:location.results[0].geometry.location.lng})
+            setQueryStringParams()
         return location})
 }
 
