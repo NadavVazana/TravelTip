@@ -74,16 +74,7 @@ function onGetLatlngByAddress(ev) {
 
 }
 
-function setQueryStringParams() {
-    const queryStringParams = `?lat=${currLoc.lat}&lng=${currLoc.lng}`
-    const newUrl =
-        window.location.protocol +
-        '//' +
-        window.location.host +
-        window.location.pathname +
-        queryStringParams
-    window.history.pushState({ path: newUrl }, '', newUrl)
-}
+
 
 function setQueryStringParams() {
     const queryStringParams = `?lat=${currLoc.lat}&lng=${currLoc.lng}`
