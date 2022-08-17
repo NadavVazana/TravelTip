@@ -1,5 +1,5 @@
-// import { axios } from "../lib/axios"
-// import { locService } from './services/loc.service.js'
+
+// import { axios } from '../lib/axios.js'
 import { storageService } from '../services/storage.service.js'
 
 export const mapService = {
@@ -7,7 +7,8 @@ export const mapService = {
     addMarker,
     panTo,
     getAddressByLatlng,
-    renderMarkers
+    renderMarkers,
+    getLatlngByAddress
 }
 
 
@@ -46,16 +47,25 @@ function renderMarkers(){
 
 }
 function addMarker(loc) {
-
+    console.log(loc);
     var marker = new google.maps.Marker({
         position: { lat: loc.latLng.lat(), lng: loc.latLng.lng() },
         map: gMap,
         title: 'Hello World!'
     })
     getAddressByLatlng(marker.position)
-    return marker
-}
+return marker}
 
+function getLatlngByAddress(address){
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GEO_KEY}`)
+    .then(loc => {
+        console.log(loc);
+        gLocations.push( {name:loc.data.results[0].formatted_address,lat:loc.data.results[0].geometry.location.lat,lng:loc.data.results[0].geometry.location.lng})
+        storageService.save('locsDB', gLocations)
+        renderMarkers()
+        })
+        
+}
 function getAddressByLatlng(loc) {
     const lat = loc.lat()
     const lng = loc.lng()

@@ -6,6 +6,8 @@ window.onAddMarker = onAddMarker
 window.onPanTo = onPanTo
 window.onGetLocs = onGetLocs
 window.onGetUserPos = onGetUserPos
+window.onGetLatlngByAddress = onGetLatlngByAddress
+
 
 
 function onInit() {
@@ -25,6 +27,10 @@ function getPosition() {
         navigator.geolocation.getCurrentPosition(resolve, reject)
 
     })
+}
+
+function onGetLatlngByAddress(address){
+    mapService.getLatlngByAddress(address)
 }
 
 function onAddMarker() {
