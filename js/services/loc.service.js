@@ -1,20 +1,16 @@
+import { storageService } from '../services/storage.service.js'
 export const locService = {
-    getLocs
+    getLocs  
 }
 
 
-const locs = [
-    
-]
-function setLoc(loc){
-    locs.push(loc)
-}
+
+
 function getLocs() {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(locs)
-        }, 2000)
-    })
-}
+    let locs = storageService.load('locsDB')
+    return Promise.resolve(locs) 
+
+    }
+
 
 
