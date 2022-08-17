@@ -83,34 +83,18 @@ function getLatlngByAddress(address) {
 
 
 function getAddressByLatlng(loc) {
-<<<<<<< HEAD
+
 
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${GEO_KEY}`)
-    .then(res => res.data)
-    .then(location =>{ 
-        console.log(location);
-        gLocations.push({ name: location.results[0].formatted_address, lat:location.results[0].geometry.location.lat, lng:location.results[0].geometry.location.lng,id: makeId() ,createdAt:Date.now()})
-        storageService.save('locsDB', gLocations )
-        onGetLocs()
-        return location})
-  
-    }
-    
-    function panTo(lat, lng) {
-=======
-    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${GEO_KEY}`)
         .then(res => res.data)
-        .then(location => {
+        .then(location =>{ 
             console.log(location);
-            gLocations.push({ name: location.results[0].formatted_address, lat: location.results[0].geometry.location.lat, lng: location.results[0].geometry.location.lng, id: makeId(), createdAt: Date.now() })
-            storageService.save('locsDB', gLocations)
-            onGetLocs()
-            return location
-        })
+            gLocations.push({ name: location.results[0].formatted_address, lat:location.results[0].geometry.location.lat, lng:location.results[0].geometry.location.lng,id: makeId() ,createdAt:Date.now()})
+            storageService.save('locsDB', gLocations )
+        return location})
 }
 
 function panTo(lat, lng) {
->>>>>>> c299e74880e6d4bb9434add6c5eedf5c544b2068
     var laLatLng = new google.maps.LatLng(lat, lng)
     gMap.panTo(laLatLng)
 }
