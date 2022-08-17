@@ -35,14 +35,18 @@ function onGetLatlngByAddress(ev) {
     ev.preventDefault()
     const address = document.querySelector('.address-input').value
     mapService.getLatlngByAddress(address)
-        .then(pos => {
-            renderCurrentLocation(pos.data.results[0].formatted_address)
-            return pos.data.results[0].geometry.location
-        })
-        .then(pos => {
-            onGetLocs()
-            mapService.panTo(pos)
-        })
+    .then(pos =>{
+        renderCurrentLocation(pos.data.results[0].formatted_address)
+        return pos.data.results[0].geometry.location} )
+    .then(pos => {
+        onGetLocs()
+        mapService.panTo(pos)})
+
+   
+
+
+    
+
 }
 
 function renderCurrentLocation(address) {
@@ -50,11 +54,7 @@ function renderCurrentLocation(address) {
         `${address}`
 }
 
-// function onAddMarker() {
-//     console.log('Adding a marker')
-//     mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 })
-//     onGetLocs()
-// }
+
 
 function onGetLocs() {
     locService.getLocs()
