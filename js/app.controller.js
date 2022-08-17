@@ -14,29 +14,42 @@ window.onRemoveLocation = onRemoveLocation
 window.saveCurrPos = saveCurrPos
 window.setQueryStringParams = setQueryStringParams
 window.renderQueryParams = renderQueryParams
+window.onCopyLocation = onCopyLocation
 
 
 function onInit() {
 
     mapService.initMap()
-    .then(() => {
-        onGetLocs()
-        renderQueryParams()
-    })
-    .catch(() => console.log('Error: cannot init map'))
-    
+        .then(() => {
+            onGetLocs()
+            renderQueryParams()
+        })
+        .catch(() => console.log('Error: cannot init map'))
+
 }
 
 function renderQueryParams() {
     const queryStringParams = new URLSearchParams(window.location.search)
     const lat = queryStringParams.get('lat')
     const lng = queryStringParams.get('lng')
-    if(!lat && !lng){
+    if (!lat && !lng) {
         getPosition()
-        .then(res => {return {lat: res.coords.latitude,lng:res.coords.longitude}})
-        .then(mapService.panTo)
+            .then(res => { return { lat: res.coords.latitude, lng: res.coords.longitude } })
+            .then(mapService.panTo)
     }
-    mapService.panTo(lat,lng)
+    mapService.panTo(lat, lng)
+}
+
+function setQueryStringParams() {
+    console.log(currLoc);
+    const queryStringParams = `?lat=${currLoc.lat}&lng=${currLoc.lng}`
+    const newUrl =
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname +
+        queryStringParams
+    window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
 
@@ -49,7 +62,6 @@ function getPosition() {
     })
 }
 function saveCurrPos(pos) {
-    console.log(pos);
     currLoc = { lat: pos.lat, lng: pos.lng }
     storageService.save('currLoc', currLoc)
 }
@@ -117,6 +129,15 @@ function onGetWeather(lat, lng, name) {
         .then(renderWeather)
     mapService.panTo(lat, lng)
 
+}
+
+function onCopyLocation() {
+    const text = window.location.href
+    navigator.clipboard.writeText(text)
+    document.querySelector('.copy-modal').classList.add('modal-open')
+    setTimeout(() => {
+        document.querySelector('.copy-modal').classList.remove('modal-open')
+    }, 2500);
 }
 
 function renderWeather(weather) {
