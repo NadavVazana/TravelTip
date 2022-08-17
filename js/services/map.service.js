@@ -16,16 +16,18 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
             console.log('google available')
             gMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                center: { lat, lng },
-                zoom: 15
+                    center: { lat, lng },
+                    zoom: 15
+                   
             })
-            console.log('Map!', gMap)
+            gMap.addListener('click',addMarker)
         })
 }
 
 function addMarker(loc) {
+   
     var marker = new google.maps.Marker({
-        position: loc,
+        position: {lat:loc.latLng.lat(),lng:loc.latLng.lng()},
         map: gMap,
         title: 'Hello World!'
     })
