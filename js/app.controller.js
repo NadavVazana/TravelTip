@@ -38,7 +38,9 @@ function onGetLatlngByAddress(ev) {
     .then(pos =>{
         renderCurrentLocation(pos.data.results[0].formatted_address)
         return pos.data.results[0].geometry.location} )
-    .then(pos => mapService.panTo(pos))
+    .then(pos => {
+        onGetLocs()
+        mapService.panTo(pos)})
 
    
 
@@ -52,10 +54,7 @@ function renderCurrentLocation(address) {
         `${address}`
 }
 
-function onAddMarker() {
-    console.log('Adding a marker')
-    mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 })
-}
+
 
 function onGetLocs() {
     locService.getLocs()

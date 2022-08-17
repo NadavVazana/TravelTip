@@ -91,6 +91,7 @@ function getAddressByLatlng(loc) {
             console.log(location);
             gLocations.push({ name: location.results[0].formatted_address, lat:location.results[0].geometry.location.lat, lng:location.results[0].geometry.location.lng,id: makeId() ,createdAt:Date.now()})
             storageService.save('locsDB', gLocations )
+            onGetLocs()
         return location})
 }
 
