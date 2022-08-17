@@ -40,23 +40,23 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
 
 // }
 
-function renderMarkers(){
-    
+function renderMarkers() {
+
     const markers = storageService.load('markersDB')
-    if(!markers || !markers.length) return
-    markers.forEach(marker =>{
+    if (!markers || !markers.length) return
+    markers.forEach(marker => {
         console.log(marker);
         new google.maps.Marker({
-            position: { lat: marker.lat,lng:marker.lng },
+            position: { lat: marker.lat, lng: marker.lng },
             map: gMap,
-            icon:'icon.png',
+            icon: 'icon.png',
             title: 'Hello World!'
         })
     })
 
 }
 function addMarker(loc) {
-    const lat =  loc.latLng.lat()
+    const lat = loc.latLng.lat()
     const lng = loc.latLng.lng()
     var marker = new google.maps.Marker({
         position: { lat, lng },
@@ -64,25 +64,26 @@ function addMarker(loc) {
         icon: 'icon.png',
         title: 'Hello World!'
     })
-    gMarkers.push({lat,lng})
-    storageService.save('markersDB',gMarkers)
-    getAddressByLatlng({lat,lng})}
+    gMarkers.push({ lat, lng })
+    storageService.save('markersDB', gMarkers)
+    getAddressByLatlng({ lat, lng })
+}
 
-function getLatlngByAddress(address){
+function getLatlngByAddress(address) {
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${GEO_KEY}`)
-    .then(loc => {
-        gLocations.push( {name:loc.data.results[0].formatted_address,lat:loc.data.results[0].geometry.location.lat,lng:loc.data.results[0].geometry.location.lng,id:makeId(),createdAt:Date.now()})
-        gMarkers.push({lat:loc.data.results[0].geometry.location.lat,lng:loc.data.results[0].geometry.location.lng})
-        storageService.save('markersDB',gMarkers)
-        storageService.save('locsDB', gLocations)
-        renderMarkers()
-        return loc
+        .then(loc => {
+            gLocations.push({ name: loc.data.results[0].formatted_address, lat: loc.data.results[0].geometry.location.lat, lng: loc.data.results[0].geometry.location.lng, id: makeId(), createdAt: Date.now() })
+            gMarkers.push({ lat: loc.data.results[0].geometry.location.lat, lng: loc.data.results[0].geometry.location.lng })
+            storageService.save('markersDB', gMarkers)
+            storageService.save('locsDB', gLocations)
+            renderMarkers()
+            return loc
         })
-        
 }
 
 
 function getAddressByLatlng(loc) {
+<<<<<<< HEAD
 
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${GEO_KEY}`)
     .then(res => res.data)
@@ -96,6 +97,20 @@ function getAddressByLatlng(loc) {
     }
     
     function panTo(lat, lng) {
+=======
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&key=${GEO_KEY}`)
+        .then(res => res.data)
+        .then(location => {
+            console.log(location);
+            gLocations.push({ name: location.results[0].formatted_address, lat: location.results[0].geometry.location.lat, lng: location.results[0].geometry.location.lng, id: makeId(), createdAt: Date.now() })
+            storageService.save('locsDB', gLocations)
+            onGetLocs()
+            return location
+        })
+}
+
+function panTo(lat, lng) {
+>>>>>>> c299e74880e6d4bb9434add6c5eedf5c544b2068
     var laLatLng = new google.maps.LatLng(lat, lng)
     gMap.panTo(laLatLng)
 }
