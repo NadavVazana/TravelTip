@@ -5,8 +5,17 @@ export const weatherService = {
 }
 
 
-function getWeather(lat,lng){
-   return axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&APPID=${WEATHER_KEY}`)
-    .then(res => {
-        return {desc: res.data.weather[0].description ,temp: res.data.main.temp, feels:res.data.main.feels_like}})
+function getWeather(lat, lng) {
+    return axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&APPID=${WEATHER_KEY}`)
+        .then(res => {
+            return {
+                desc: res.data.weather[0].description,
+                temp: res.data.main.temp,
+                feels: res.data.main.feels_like,
+                icon: res.data.weather[0].icon,
+                humid: res.data.main.humidity,
+                city: res.data.name,
+                country: res.data.sys.country,
+            }
+        })
 }

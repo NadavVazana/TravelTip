@@ -49,24 +49,6 @@ body {
     z-index: 500;
 }
 
-.copy-modal {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    opacity: 0;
-    background-color: #242639;
-    transition: top 0.5s, opacity 0.2s;
-    color: #edf2f4;
-    padding: 4px 8px;
-}
-
-.copy-modal.modal-open {
-    top: calc(60px + 1.3rem);
-    opacity: 1;
-    transition: top 0.5s;
-    z-index: -11;
-}
-
 .logo {
     color: #8d99ae;
     letter-spacing: 0.3rem;
@@ -94,15 +76,33 @@ body {
     align-items: center;
 }
 
+.location-display > div {
+    position: relative;
+}
 
+.copy-modal {
+    position: absolute;
+    top: 50%;
+    transform: translate(50%, -50%);
+    z-index: 1;
+    transition: transform 0.6s;
+}
+
+.copy-modal.modal-open {
+    position: absolute;
+    top: 50%;
+    transform: translate(-110%, -50%);
+}
 
 .location-display p {
     font-size: 1.5rem;
 }
 
 .location-display button {
+    position: relative;
     height: 100%;
     padding: 10px 20px;
+    z-index: 3;
 }
 
 .main-section {
@@ -125,14 +125,34 @@ body {
     font-size: 0.7rem;
     overflow: scroll;
     overflow-x: hidden;
+    border: 1px solid #1d1d1d;
+
 }
 
 .loc {
     display: flex;
     align-items: center;
     min-height: fit-content;
-    border: 1px solid black;
     flex: 1;
+    max-height: 50px;
+    border-bottom: 1px solid #1d1d1d;
+}
+
+.loc-btn {
+    width: 45px;
+    height: 45px;
+    margin-right: 5px;
+
+    transition: background-color 0.5s;
+}
+
+.loc-btn:hover {
+    background-color: #8d99ae;
+}
+
+.loc img {
+    cursor: pointer;
+    width: 100%;
 }
 
 .loc-address {
@@ -154,11 +174,41 @@ body {
 }
 
 img {
-    width: 15%;
+    width:100%;
 }
 
 .weather-info {
     flex-basis: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    /* background-color: #8d99ae; */
+}
+
+.weather-info  p {
+    display: flex;
+    align-items: center;
+}
+
+.weather-left p:last-child {
+    font-size: 0.8rem;
+}
+
+.weather-right {
+    font-size: 0.7rem;
+    margin-left: 1em;
+}
+
+.flag {
+    margin-inline-start: 12px;
+    width: 25px;
+}
+
+.temp {
+    background-color: #6ede8a;
+    padding: 1px 2px;
+    border-radius: 2px;
+    margin-left: 5px;
 }
 
 

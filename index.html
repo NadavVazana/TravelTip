@@ -8,8 +8,7 @@
 </head>
 <body class="main-layout">
 
-    <header class="full">
-        <div class="main-header">
+        <header class="main-header full">
             <h1 class="logo">TravelTips</h1>
             <nav class="main-nav">
                 <form class="btn add-location" onsubmit="onGetLatlngByAddress(event)">
@@ -18,22 +17,21 @@
                 </form>
                 <button class="btn" onclick="onGetUserPos()" class="btn-user-pos">My Location</button>
             </nav>
-        </div>
-        <div class="copy-modal">Copied!</div>
-    </header>
+        </header>
+
     
     <section class="location-display main-layout margin-auto">
-       
         <p>Location: <span class="user-pos"></span></p>
-        <button class="btn" onclick="onCopyLocation()">Copy Location</button>
+        <div>
+            <div class="copy-modal">Copied!</div>
+            <button class="btn" onclick="onCopyLocation()">Copy Location</button>
+        </div>
     </section>
-
+    
     <section class="main-section main-layout margin-auto">
         <section class="location-info">
             <div class="locs"></div>
-
-            <div class="weather-info">
-            </div>
+            <div class="weather-info"></div>
         </section>
         <div id="map" style="width: 100%; height: 400px;"></div>
     </section>

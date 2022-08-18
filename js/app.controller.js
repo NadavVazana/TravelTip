@@ -141,12 +141,20 @@ function onCopyLocation() {
 }
 
 function renderWeather(weather) {
-
+    console.log('weather:', weather)
     const elWeatherDiv = document.querySelector('.weather-info')
     let strHTML = `
-        <p>${weather.desc}</p>
-        <p>Temp: ${k2c(weather.temp).toFixed(2)}C</p>
-        <p>Feels Like: ${k2c(weather.feels).toFixed(2)}</p>
+    
+    <div class="weather-left">
+        <p>${weather.city}, ${weather.country} <img class="flag" src="https://countryflagsapi.com/png/${weather.country}" alt=""></p>
+        <p>${capitalize(weather.desc)} <img src="http://openweathermap.org/img/w/${weather.icon}.png" alt=""></p>
+    </div>
+    <div class="weather-right">
+        <p>Temp: <span class="temp">${k2c(weather.temp).toFixed(2)}°C</span></p>
+        <p>Feels Like: <span class="temp">${k2c(weather.feels).toFixed(2)}°C</span></p>
+        <p>Humidity: ${weather.humid}%</p>
+    </div>
+        
     `
     elWeatherDiv.innerHTML = strHTML
 }
@@ -154,7 +162,10 @@ function renderWeather(weather) {
 function renderLocations(locs) {
     let strHTMLs = locs.map(loc => {
         return `<div class="loc">
-        <img  onclick="onGetWeather(${loc.lat},${loc.lng},'${loc.name}')" src="img/marker.png" alt="marker">
+        <div class="loc-btn">
+            <img  onclick="onGetWeather(${loc.lat},${loc.lng},'${loc.name}')" src="img/marker.png" alt="marker">
+        </div>
+        
         <div class="loc-info">
             <div class="loc-address">${loc.name}</div>
             <div class="loc-latlng">${loc.lng}, ${loc.lat}</div>
@@ -167,6 +178,10 @@ function renderLocations(locs) {
 
 function k2c(kelvin) {
     return kelvin - 273.15
+}
+
+function capitalize(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1)
 }
 
 function onRemoveLocation(lat, lng) {
